@@ -8,10 +8,11 @@ const UserRoutes = require('./Routes/UserRoutes')
 const SkillRoute = require('./Routes/SkillsRoute')
 const multer = require('multer')
 const { s3Uploadc2 } = require('./s3Service')
-const uuid = require('uuid').v4
 
 const PORT = 5656
-app.use(cors('https://skill-swap.netlify.app/'))
+app.use(cors({
+    origin: 'https://skill-swap.netlify.app'
+}))
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
