@@ -10,6 +10,7 @@ const multer = require('multer')
 const { s3Uploadc2 } = require('./s3Service')
 
 const PORT = 5656
+app.use(cors())
 app.use(cors({
     origin: 'https://skill-swap.netlify.app'
 }))
