@@ -11,12 +11,15 @@ const { s3Uploadc2 } = require('./s3Service')
 const uuid = require('uuid').v4
 
 const PORT = 5656
-app.use(cors())
+app.use(cors('https://skill-swap.netlify.app/'))
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use('/user', UserRoutes)
 app.use('/skill', SkillRoute)
+app.use('/', (req, res) => {
+    res.send("Hulalalla")
+})
 
 const storage = multer.memoryStorage()
 
