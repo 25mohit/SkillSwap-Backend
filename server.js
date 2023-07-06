@@ -23,6 +23,11 @@ var corsOptions = {
   }
 app.use(cors(corsOptions))
 
+app.use((req, res, next) => {
+    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
+    next()
+})
+
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use('/user', UserRoutes)
@@ -32,11 +37,6 @@ app.use('/', (req, res) => {
     res.send("Hulalalla")
     // next()
 })
-app.use((req, res, next) => {
-    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
-    next()
-})
-
 const storage = multer.memoryStorage()
 
 const fileFilter = (req, file, cb) => {
