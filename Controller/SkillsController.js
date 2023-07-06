@@ -76,16 +76,17 @@ const getSkills = asyncHandler(async (req, res) => {
 });
 
 const getSingleSkill = asyncHandler(async (req, res) => {
-  const { id } = req.user;
   const { uuid } = req.body;
 
-  const skills = await Skill.find({ createdBy: id, _id:uuid }, { uuid: 0,_id:0, createdBy: 0, __v: 0 });
+  const skills = await Skill.find({_id:uuid }, { uuid: 0,_id:0, __v: 0 });
 
   if (skills.length === 0) {
     return res.status(200).json({ status: true, message: 'No skills found for the user with the given UUID.' });
   }
 
-  res.status(200).json({ status: true, skill:skills?.[0] });
+  const user = await User.find({_id:skills?.[0]?.createdBy}).select(' -password -uuid -updatedAt -__v -_id')
+
+  res.status(200).json({ status: true, skill:skills?.[0], user });
 });
 
 const deleteSkill = asyncHandler(async (req, res) => {
