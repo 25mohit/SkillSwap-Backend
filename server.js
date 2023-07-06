@@ -28,8 +28,13 @@ app.use(express.json())
 app.use('/user', UserRoutes)
 app.use('/skill', SkillRoute)
 app.use('/', (req, res) => {
-    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
+    // res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
     res.send("Hulalalla")
+    // next()
+})
+app.use((req, res, next) => {
+    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
+    next()
 })
 
 const storage = multer.memoryStorage()
