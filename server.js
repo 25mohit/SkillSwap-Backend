@@ -11,9 +11,17 @@ const { s3Uploadc2 } = require('./s3Service')
 
 const PORT = 5656
 app.use(cors())
-app.use(cors({
-    origin: 'https://skill-swap.netlify.app'
-}))
+let whiteList = ['https://skill-swap.netlify.app', 'http://localhost:3001', 'http://localhost:3000']
+var corsOptions = {
+    origin: function (origin, callback) {
+      if (whiteList.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    }
+  }
+app.use(cors(corsOptions))
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
