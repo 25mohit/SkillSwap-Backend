@@ -28,6 +28,7 @@ app.use(express.json())
 app.use('/user', UserRoutes)
 app.use('/skill', SkillRoute)
 app.use('/', (req, res) => {
+    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
     res.send("Hulalalla")
 })
 
