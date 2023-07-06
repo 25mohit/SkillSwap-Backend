@@ -8,9 +8,16 @@ const UserRoutes = require('./Routes/UserRoutes')
 const SkillRoute = require('./Routes/SkillsRoute')
 const multer = require('multer')
 const { s3Uploadc2 } = require('./s3Service')
+const helmet = require('helmet');
+
 
 const PORT = 5656
 app.use(cors())
+app.use((req, res, next) => {
+    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
+    next()
+})
+
 let whiteList = ['https://skill-swap.netlify.app', 'http://localhost:3001', 'http://localhost:3000']
 var corsOptions = {
     origin: function (origin, callback) {
@@ -23,10 +30,9 @@ var corsOptions = {
   }
 app.use(cors(corsOptions))
 
-app.use((req, res, next) => {
-    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
-    next()
-})
+// app.use(helmet({
+//     referrerPolicy: { policy: 'no-referrer-when-downgrade' }
+//   }));
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
