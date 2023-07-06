@@ -8,41 +8,31 @@ const UserRoutes = require('./Routes/UserRoutes')
 const SkillRoute = require('./Routes/SkillsRoute')
 const multer = require('multer')
 const { s3Uploadc2 } = require('./s3Service')
-const helmet = require('helmet');
-
 
 const PORT = 5656
 app.use(cors())
-app.use((req, res, next) => {
-    res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
-    next()
-})
-
-app.use(helmet({
-    referrerPolicy: { policy: 'no-referrer-when-downgrade' }
-  }));
-let whiteList = ['https://skill-swap.netlify.app', 'http://localhost:3001', 'http://localhost:3000']
-var corsOptions = {
-    origin: function (origin, callback) {
-      if (whiteList.indexOf(origin) !== -1) {
-        callback(null, true)
-      } else {
-        callback(new Error('Not allowed by CORS'))
-      }
-    }
-  }
-app.use(cors(corsOptions))
-
+// app.use((req, res, next) => {
+//     res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade');
+//     next();
+// })
+app.use(
+    cors({
+      origin: ['https://skill-swap.netlify.app', 'http://localhost:3000'],
+      methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+    })
+  );
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use('/user', UserRoutes)
 app.use('/skill', SkillRoute)
+
 app.use('/', (req, res) => {
-    // res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade')
-    res.send("Hulalalla")
-    // next()
+    res.send('This is Home Route')
 })
+
 const storage = multer.memoryStorage()
 
 const fileFilter = (req, file, cb) => {
