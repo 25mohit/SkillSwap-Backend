@@ -18,6 +18,9 @@ app.use((req, res, next) => {
     next()
 })
 
+app.use(helmet({
+    referrerPolicy: { policy: 'no-referrer-when-downgrade' }
+  }));
 let whiteList = ['https://skill-swap.netlify.app', 'http://localhost:3001', 'http://localhost:3000']
 var corsOptions = {
     origin: function (origin, callback) {
@@ -30,9 +33,6 @@ var corsOptions = {
   }
 app.use(cors(corsOptions))
 
-// app.use(helmet({
-//     referrerPolicy: { policy: 'no-referrer-when-downgrade' }
-//   }));
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
