@@ -26,9 +26,6 @@ app.use(
 
   console.log(__dirname);
 
-  app.use('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-})
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -62,6 +59,9 @@ app.use((error, req, res, next) => {
     }
 })
 
+app.use('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html')
+})
 mongoose.connect(process.env.MONGO_URI).then(() => {
     app.listen(PORT, () => {
         console.log(`Server is started with MongoDB on PORT ${PORT}`);
