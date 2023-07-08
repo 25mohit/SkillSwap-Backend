@@ -24,14 +24,16 @@ app.use(
     })
   );
 
+  console.log(__dirname);
+
+  app.use('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html')
+})
+
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use('/user', UserRoutes)
 app.use('/skill', SkillRoute)
-
-app.use('/', (req, res) => {
-    res.send('This is Home Route')
-})
 
 const storage = multer.memoryStorage()
 
