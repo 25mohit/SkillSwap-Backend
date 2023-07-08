@@ -9,7 +9,7 @@ const SkillRoute = require('./Routes/SkillsRoute')
 const multer = require('multer')
 const { s3Uploadc2 } = require('./s3Service')
 
-const PORT = 5656
+const PORT = process.env.PORT || 3000
 app.use(cors())
 // app.use((req, res, next) => {
 //     res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade');
