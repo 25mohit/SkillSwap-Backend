@@ -9,12 +9,9 @@ const SkillRoute = require('./Routes/SkillsRoute')
 const multer = require('multer')
 const { s3Uploadc2 } = require('./s3Service')
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5656
 app.use(cors())
-// app.use((req, res, next) => {
-//     res.setHeader('Referrer-Policy', 'no-referrer-when-downgrade');
-//     next();
-// })
+
 app.use(
     cors({
       origin: ['https://skill-swap.netlify.app', 'http://localhost:3000'],
@@ -23,9 +20,6 @@ app.use(
       credentials: true,
     })
   );
-
-  console.log(__dirname);
-
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -59,9 +53,10 @@ app.use((error, req, res, next) => {
     }
 })
 
-app.use('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-})
+// app.use('/', (req, res) => {
+//     res.sendFile(__dirname + '/index.html')
+// })
+
 mongoose.connect(process.env.MONGO_URI).then(() => {
     app.listen(PORT, () => {
         console.log(`Server is started with MongoDB on PORT ${PORT}`);

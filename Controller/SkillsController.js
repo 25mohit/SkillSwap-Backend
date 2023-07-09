@@ -146,13 +146,14 @@ const GetAllSkillsPaginate = asyncHandler(async (req, res) => {
     }
     
   const userIds = skills.map((skill) => skill.createdBy);
-  const users = await User.find({ _id: { $in: userIds } }).select('name email country city createdAt github instagram website profile');
+  const users = await User.find({ _id: { $in: userIds } }).select('name userName email country city createdAt github instagram website profile');
 
   const skillsWithUsers = skills.map((skill) => {
     const user = users.find((user) => user._id.toString() === skill.createdBy.toString());
     return {
       skill,
       user: {
+        uName: user.userName,
         userName: user.name,
         userEmail: user.email,
         profile:user.profile,

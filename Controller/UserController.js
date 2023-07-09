@@ -215,12 +215,28 @@ const getBookmarks = asyncHandler(async (req, res) => {
   const id = req.user.id; // Assuming user ID is available in the req header with the key 'usid'
 
   // Find the bookmarks for the current user
-  const bookmarks = await Bookmark.find({ user: id }).select('-_id -__v -user -skill -createdBy -updatedAt');
+  const bookmarks = await Bookmark.find({ user: id }).select(' -__v -user  -createdBy -updatedAt');
 
+  console.log(bookmarks);
+  
   if(!bookmarks){
     return res.status(400).json({status: false, message: "You have not Bookmarked any skill"})
   }
-  return res.status(200).json({ success: true, bookmarks });
+  const result = bookmarks?.map(book => {
+    return {
+      bookID: book?._id,
+      _id: book?.skill,
+      skillName: book?.skillName,
+      skillDescription: book?.skillDescription,
+      skillTechnologies: book?.skillTechnologies,
+      skillVisibility: book?.skillVisibility,
+      skillLevel: book?.skillLevel,
+      priceTerm: book?.priceTerm,
+      createdAt: book?.createdAt,
+    }
+  })
+  
+  return res.status(200).json({ success: true, result });
 });
 
 const removeBookmark = asyncHandler(async (req, res) => {
