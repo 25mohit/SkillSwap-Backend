@@ -44,21 +44,19 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, loginBy } = req.body;
 
-  if (!email || !password) {
+  if (!email || !loginBy) {
     return res.status(400).json({ status: false, message: 'Email and password are required.' });
+  }
+  
+  if(loginBy === "credentials" && !password){
+      return res.status(400).json({ status: false, message: 'Email and password are required.' });
   }
 
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(400).json({ status: false, message: 'Invalid email or password.' });
-  }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-
-  if (!isPasswordValid) {
     return res.status(400).json({ status: false, message: 'Invalid email or password.' });
   }
   const token = jwt.sign(
@@ -72,6 +70,17 @@ const loginUser = asyncHandler(async (req, res) => {
     process.env.JWT_SECRET_KEY, // Replace with your own secret key for signing the token
     { expiresIn: '4d',  noTimestamp: true  } // Token expiry set to 4 days
   );
+
+  if(loginBy=== "google"){
+      return res.status(200).json({ status: true, message: 'Logged in successfully.', token });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    return res.status(400).json({ status: false, message: 'Invalid email or password.' });
+  }
+ 
   res.status(200).json({ status: true, message: 'Logged in successfully.', token });
 });
 
