@@ -120,7 +120,7 @@ const GetAllSkillsPaginate = asyncHandler(async (req, res) => {
   const filter = req.body.filter; // Filter by 'latest', 'oldest', 'most_requested', 'free', 'paid'
   let sort = req.body.sort || 'createdAt'; // Sort by 'createdAt' by default
 
-  const query = { createdBy: { $ne: id } }; // Exclude current user's skills
+  const query = { createdBy: { $ne: id }, skillVisibility: 'public' }; // Exclude current user's skills
 
   // Apply additional filters
   if (filter === 'latest') {
@@ -170,6 +170,7 @@ const GetAllSkillsPaginate = asyncHandler(async (req, res) => {
       },
     };
   });
+
   res.json({
     skills:skillsWithUsers,
     currentPage: page,
