@@ -11,6 +11,7 @@ const GetNotifications = asyncHandler(async (req, res) => {
   // Find all notifications for the logged-in user
   const notifications = await Notification.find({ userId:id }).sort({ createdAt: 'desc' });
 
+  console.log(notifications);
   // Fetch sender's name and email for each notification
   const populatedNotifications = await Promise.all(
     notifications.map(async (notification) => {
@@ -30,6 +31,7 @@ const GetNotifications = asyncHandler(async (req, res) => {
         // senderUserId: notification.senderUserId,
         senderName: senderUser ? senderUser.name : null,
         senderEmail: senderUser ? senderUser.email : null,
+        senderSkillNameReqForSwaping: notification.senderSkillNameReqForSwaping,
         profile: senderUser ? senderUser.profile : null,
         message: notification.message,
         requestTime: notification.requestTime,

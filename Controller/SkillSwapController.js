@@ -5,16 +5,16 @@ const User = require('../Modals/UserModal');
 const Skill = require('../Modals/SkillsModal');
 
 const SendSkillSwapRequest = asyncHandler(async (req, res) => {
-  const { userId, skillId } = req.body;
+  const { userId, skillId, swapingID } = req.body;
   const senderUserId = req.user.id; // Assuming the authenticated user's ID is available in req.user.id
 
-  if (!userId || !skillId) {
+  if (!userId || !skillId || !swapingID) {
     res.status(400).json({ message: 'User ID and skill ID are required' });
     return;
   }
 
   const receiverUser = await User.findById(userId);
-  
+
   if (!receiverUser) {
     res.status(404).json({ message: 'Receiver user not found' });
     return;
@@ -22,6 +22,9 @@ const SendSkillSwapRequest = asyncHandler(async (req, res) => {
 
   // Check if the skill exists
   const skill = await Skill.findById(skillId);
+  const swapingSkill = await Skill.findById(swapingID);
+
+  // console.log(skill, swapingSkill);
   if (!skill) {
     res.status(404).json({ message: 'Skill not found' });
     return;
@@ -42,6 +45,7 @@ const SendSkillSwapRequest = asyncHandler(async (req, res) => {
   const skillSwapRequest = new SkillSwapRequest({
     senderUserId,
     receiverUserId: userId,
+    swapingID,
     skillId,
     status: 'pending', // Set the initial status as pending
   });
@@ -57,6 +61,7 @@ const SendSkillSwapRequest = asyncHandler(async (req, res) => {
   const notification = new Notification({
     userId,
     senderUserId,
+    senderSkillNameReqForSwaping: swapingSkill?.skillName,
     status: 'pending',
     message: 'You have received a SkillSwap request.',
     requestTime: skillSwapRequest.createdAt,

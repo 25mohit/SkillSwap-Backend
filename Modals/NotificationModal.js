@@ -10,6 +10,10 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  senderSkillNameReqForSwaping: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
     required: true,
