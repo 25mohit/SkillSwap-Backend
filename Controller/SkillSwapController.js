@@ -14,6 +14,7 @@ const SendSkillSwapRequest = asyncHandler(async (req, res) => {
   }
 
   const receiverUser = await User.findById(userId);
+  
   if (!receiverUser) {
     res.status(404).json({ message: 'Receiver user not found' });
     return;

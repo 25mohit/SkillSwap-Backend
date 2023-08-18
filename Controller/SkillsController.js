@@ -153,6 +153,7 @@ const GetAllSkillsPaginate = asyncHandler(async (req, res) => {
     return {
       skill,
       user: {
+        _id: user._id,
         uName: user.userName,
         userName: user.name,
         userEmail: user.email,

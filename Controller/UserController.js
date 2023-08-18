@@ -225,8 +225,6 @@ const getBookmarks = asyncHandler(async (req, res) => {
 
   // Find the bookmarks for the current user
   const bookmarks = await Bookmark.find({ user: id }).select(' -__v -user  -createdBy -updatedAt');
-
-  console.log(bookmarks);
   
   if(!bookmarks){
     return res.status(400).json({status: false, message: "You have not Bookmarked any skill"})
