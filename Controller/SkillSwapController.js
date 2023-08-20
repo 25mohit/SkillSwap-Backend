@@ -72,4 +72,51 @@ const SendSkillSwapRequest = asyncHandler(async (req, res) => {
   res.status(201).json({ message: 'SkillSwap request sent successfully' });
 });
 
-module.exports = { SendSkillSwapRequest };
+const HandleSkillSwapRequest = asyncHandler ( async (req, res) => {
+  const { id } = req.user; // Assuming the authenticated user's ID is available in req.user.id
+
+  const { action , skill, notification } = req.body
+  
+  const getNoti = await Notification.findOne({_id:notification, status: "pending"})
+  const getSkillSwapReq = await SkillSwapRequest.findOne({skillId:skill, status: "pending"})
+
+  if (!getNoti || !getSkillSwapReq) {
+    return res.status(400).send({status: false, message:"Action already taken for this Skill"});
+  }
+
+  if (action === 'approve') {
+    getSkillSwapReq.status = 'accepted'
+    getNoti.status = 'accepted';
+    const getUser = await User.findById(id)
+    getUser.swapedSkills = [...getUser.swapedSkills, skill]
+  
+    try {
+  
+      await getUser.save()
+      await getNoti.save();
+      await getSkillSwapReq.save();
+
+      return res.status(200).json({ status: true, message: "Skill Swap Request Approved" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ status: false, message: "An error occurred" });
+    }
+  } else if(action === 'reject') {
+    getSkillSwapReq.status = 'rejected'
+    getNoti.status = 'rejected';
+
+    try {
+      const updatedNotification = await getNoti.save();
+      const updateSkillReq = await getSkillSwapReq.save();
+      console.log(updatedNotification, updateSkillReq);
+
+      return res.status(200).json({ status: true, message: "Skill Swap Request Rejected" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ status: false, message: "An error occurred" });
+    }
+  }
+  // console.log(action, skill, notification, getNoti);
+})
+
+module.exports = { SendSkillSwapRequest, HandleSkillSwapRequest  };

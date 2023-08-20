@@ -2,7 +2,7 @@ const express = require('express')
 const { registerUser, loginUser, updateProfile, updatePassword, getProfile, getUsersPublicProfile, createBookmark, getBookmarks, removeBookmark } = require('../Controller/UserController')
 const verifyUser = require('../Middleware/VerifyUser')
 const { GetNotifications } = require('../Controller/NotificationController')
-const { SendSkillSwapRequest } = require('../Controller/SkillSwapController')
+const { SendSkillSwapRequest, HandleSkillSwapRequest } = require('../Controller/SkillSwapController')
 const router = express.Router()
 
 router.post('/register', registerUser)
@@ -12,6 +12,7 @@ router.patch('/profile-update', verifyUser,  updateProfile)
 router.patch('/update-password', verifyUser, updatePassword)
 router.get('/notification', verifyUser,  GetNotifications)
 router.post('/swap-skill-request', verifyUser,  SendSkillSwapRequest)
+router.post('/handle-swap-skill-request', verifyUser,  HandleSkillSwapRequest)
 router.post('/public-profile/:userName', getUsersPublicProfile)
 
 // BOOKMARK ROUTES

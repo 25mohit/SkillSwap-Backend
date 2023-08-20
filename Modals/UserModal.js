@@ -8,6 +8,7 @@ const UserSchema = mongoose.Schema({
     password: String,
     state: String,
     city: String,
+    swapedSkills:Array,
     designation: String,
     employeer: String,
     country: String,

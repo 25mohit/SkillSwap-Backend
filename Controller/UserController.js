@@ -172,7 +172,6 @@ const user = await User.findOne({userName: userName?.split('@')?.[1]}).select('-
   // Find the skills associated with the user
   const skills = await Skills.find({ createdBy: user._id, skillVisibility: 'public' }).select('-_id -createdAt -uuid -__v -updatedAt -createdBy');
 
-  console.log("skills", skills);
   return res.status(200).json({ status: true,
     user,
     skills,
