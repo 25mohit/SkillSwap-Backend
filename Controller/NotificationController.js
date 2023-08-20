@@ -17,7 +17,6 @@ const GetNotifications = asyncHandler(async (req, res) => {
       const senderUser = await User.findById(notification.senderUserId);
       const skill = await Skill.findById(notification.skillDetails);
       
-      // console.log("senderUser", senderUser);
       const skillData = {
         skillName: skill.skillName,
         skillDescription: skill.skillDescription,

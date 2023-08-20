@@ -24,7 +24,6 @@ const SendSkillSwapRequest = asyncHandler(async (req, res) => {
   const skill = await Skill.findById(skillId);
   const swapingSkill = await Skill.findById(swapingID);
 
-  // console.log(skill, swapingSkill);
   if (!skill) {
     res.status(404).json({ message: 'Skill not found' });
     return;
@@ -98,7 +97,6 @@ const HandleSkillSwapRequest = asyncHandler ( async (req, res) => {
 
       return res.status(200).json({ status: true, message: "Skill Swap Request Approved" });
     } catch (error) {
-      console.error(error);
       return res.status(500).json({ status: false, message: "An error occurred" });
     }
   } else if(action === 'reject') {
@@ -108,15 +106,12 @@ const HandleSkillSwapRequest = asyncHandler ( async (req, res) => {
     try {
       const updatedNotification = await getNoti.save();
       const updateSkillReq = await getSkillSwapReq.save();
-      console.log(updatedNotification, updateSkillReq);
 
       return res.status(200).json({ status: true, message: "Skill Swap Request Rejected" });
     } catch (error) {
-      console.error(error);
       return res.status(500).json({ status: false, message: "An error occurred" });
     }
   }
-  // console.log(action, skill, notification, getNoti);
 })
 
 module.exports = { SendSkillSwapRequest, HandleSkillSwapRequest  };
